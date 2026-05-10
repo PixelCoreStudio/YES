@@ -134,6 +134,7 @@ FinderTab:CreateButton({
 })
 
 FinderTab:CreateLabel("If the search finds nothing, this game likely uses server-side checks or has no exploitable purchase IDs.")
+FinderTab:CreateLabel("⚠️ Note: Don't rely only on the search! Try to buy something from the shop manually; sometimes the signal triggers anyway.")
 FinderTab:CreateSection("Found Results")
 
 -- 2. ACTIONS TAB
