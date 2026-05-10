@@ -58,8 +58,8 @@ end
 local Window = Rayfield:CreateWindow({
     Name = "Universal Fake Purchase Tool",
     Icon = 0,
-    LoadingTitle = "Pixel Core Loader",
-    LoadingSubtitle = "Configuration Saving Enabled",
+    LoadingTitle = "Universal Fake Purchase Tool",
+    LoadingSubtitle = "by Pixel Core",
     ConfigurationSaving = {
         Enabled = true,
         FolderName = "Universal Fake Purchase Tool by Pixel Core", 
