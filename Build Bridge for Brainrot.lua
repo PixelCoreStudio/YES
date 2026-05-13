@@ -223,7 +223,7 @@ local spamBUE = Upgrade:CreateToggle({
     CurrentValue = false,
     Flag = "SBU",
     Callback = function(Value)
-        local IsSpammingBUE = Value -- Setzt den Status auf true oder false
+        IsSpammingBUE = Value -- Setzt den Status auf true oder false
 
         if Value then
             task.spawn(function()
