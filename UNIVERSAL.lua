@@ -612,6 +612,38 @@ PlayerScroll.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 PlayerScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
 PlayerScroll.ScrollBarThickness = 4
 
+local SelectedPlayersFrame = Instance.new("Frame")
+SelectedPlayersFrame.Parent = G2L["23"]
+SelectedPlayersFrame.Size = UDim2.new(0,120,0,250)
+SelectedPlayersFrame.Position = UDim2.new(0,480,0,30)
+SelectedPlayersFrame.BackgroundColor3 = Color3.fromRGB(25,25,25)
+SelectedPlayersFrame.BorderSizePixel = 0
+
+local SelectedCorner = Instance.new("UICorner")
+SelectedCorner.Parent = SelectedPlayersFrame
+
+local SelectedTitle = Instance.new("TextLabel")
+SelectedTitle.Parent = SelectedPlayersFrame
+SelectedTitle.Size = UDim2.new(1,0,0,30)
+SelectedTitle.BackgroundTransparency = 1
+SelectedTitle.Text = "SELECTED"
+SelectedTitle.TextColor3 = Color3.fromRGB(255,255,255)
+SelectedTitle.Font = Enum.Font.FredokaOne
+SelectedTitle.TextSize = 16
+
+local SelectedScroll = Instance.new("ScrollingFrame")
+SelectedScroll.Parent = SelectedPlayersFrame
+SelectedScroll.Position = UDim2.new(0,0,0,30)
+SelectedScroll.Size = UDim2.new(1,0,1,-30)
+SelectedScroll.BackgroundTransparency = 1
+SelectedScroll.ScrollBarThickness = 3
+SelectedScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+SelectedScroll.CanvasSize = UDim2.new(0,0,0,0)
+
+local SelectedLayout = Instance.new("UIListLayout")
+SelectedLayout.Parent = SelectedScroll
+SelectedLayout.Padding = UDim.new(0,4)
+
 local PlayerLayout = Instance.new("UIListLayout")
 PlayerLayout.Parent = PlayerScroll
 PlayerLayout.Padding = UDim.new(0, 5)
@@ -830,9 +862,11 @@ local function refreshPlayerList()
 			PBtn.MouseButton1Click:Connect(function()
 				if table.find(selectedPlayers, v.Name) then
 					table.remove(selectedPlayers, table.find(selectedPlayers, v.Name))
+					refreshSelectedPlayers()
 					PBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 				else
 					table.insert(selectedPlayers, v.Name)
+					refreshSelectedPlayers()
 					PBtn.BackgroundColor3 = Color3.fromRGB(111, 87, 176)
 				end
 			end)
@@ -842,6 +876,40 @@ local function refreshPlayerList()
 	task.wait()
 
 	PlayerScroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 20)
+end
+
+local function refreshSelectedPlayers()
+
+	SelectedScroll:ClearAllChildren()
+
+	local layout = Instance.new("UIListLayout")
+	layout.Parent = SelectedScroll
+	layout.Padding = UDim.new(0,4)
+
+	for _,name in pairs(selectedPlayers) do
+
+		local Label = Instance.new("TextLabel")
+
+		Label.Parent = SelectedScroll
+		Label.Size = UDim2.new(1,-6,0,28)
+		Label.BackgroundColor3 = Color3.fromRGB(111,87,176)
+		Label.TextColor3 = Color3.fromRGB(255,255,255)
+		Label.Font = Enum.Font.FredokaOne
+		Label.TextSize = 14
+		Label.Text = name
+
+		local Corner = Instance.new("UICorner")
+		Corner.Parent = Label
+	end
+
+	task.wait()
+
+	SelectedScroll.CanvasSize = UDim2.new(
+		0,
+		0,
+		0,
+		layout.AbsoluteContentSize.Y + 10
+	)
 end
 
 PlayerScroll.ScrollBarThickness = 4
@@ -937,16 +1005,19 @@ SelectAllButton.MouseButton1Click:Connect(function()
 	for _, v in pairs(Players:GetPlayers()) do
 		if v ~= LocalPlayer then
 			table.insert(selectedPlayers, v.Name)
+			refreshSelectedPlayers()
 		end
 	end
 
 	refreshPlayerList()
+	refreshSelectedPlayers()
 end)
 
 DeselectAllButton.MouseButton1Click:Connect(function()
 	selectedPlayers = {}
 
 	refreshPlayerList()
+	refreshSelectedPlayers()
 end)
 
 SpamPlayersButton.MouseButton1Click:Connect(function()
