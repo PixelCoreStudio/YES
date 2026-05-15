@@ -750,6 +750,7 @@ local function addFoundButton(id, itemName)
 	Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Btn.Font = Enum.Font.FredokaOne
 	Btn.Text = itemName .. " [" .. id .. "]"
+	fixButton(Btn)
 
 	Btn.MouseButton1Click:Connect(function()
 		setclipboard(tostring(id))
@@ -804,6 +805,7 @@ _G.handleNewID = function(id, infoType)
 	QuickBtn.Font = Enum.Font.FredokaOne
 	QuickBtn.TextSize = 15
 	QuickBtn.Text = itemName .. " [" .. id .. "]"
+	fixButton(Btn)
 
 	QuickBtn.MouseButton1Click:Connect(function()
 		manualID = tostring(id)
@@ -1080,5 +1082,52 @@ task.spawn(function()
 		runDeepScan()
 	end
 end)
+
+local TweenService = game:GetService("TweenService")
+
+local function fixButton(button)
+
+	button.AutoButtonColor = false
+
+	local normal = button.BackgroundColor3
+
+	local hover = Color3.fromRGB(
+		math.clamp(normal.R * 255 + 15,0,255),
+		math.clamp(normal.G * 255 + 15,0,255),
+		math.clamp(normal.B * 255 + 15,0,255)
+	)
+
+	local enterTween = TweenService:Create(
+		button,
+		TweenInfo.new(0.12),
+		{
+			BackgroundColor3 = hover
+		}
+	)
+
+	local leaveTween = TweenService:Create(
+		button,
+		TweenInfo.new(0.12),
+		{
+			BackgroundColor3 = normal
+		}
+	)
+
+	button.MouseEnter:Connect(function()
+		enterTween:Play()
+	end)
+
+	button.MouseLeave:Connect(function()
+		leaveTween:Play()
+	end)
+end
+
+fixButton(ScanButton)
+fixButton(ExecuteButton)
+fixButton(SpamButton)
+fixButton(ExecuteTargetButton)
+fixButton(AutoSearchToggle)
+
+
 
 return G2L["1"], require
